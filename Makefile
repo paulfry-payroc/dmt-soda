@@ -33,9 +33,6 @@ deps:
 	@j2 src/templates/jinja_templates/configuration.yml.j2 -o configuration.yml
 .PHONY: deps
 
-a:
-	@j2 src/templates/jinja_templates/configuration.yml.j2 -o configuration.yml
-
 install:
 	@echo "------------------------------------------------------------------"
 	@echo "${YELLOW}Target: 'install'. Run the setup and install targets.${COLOUR_OFF}"
