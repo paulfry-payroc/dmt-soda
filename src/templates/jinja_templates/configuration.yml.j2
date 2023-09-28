@@ -1,0 +1,15 @@
+---
+data_source snowflake_db:
+    type: snowflake
+    connection:
+        username: ${SF_USER}
+        password: ${SF_PASSWORD}
+        account: ${SF_ACCOUNT}
+        database: ${SF_DATABASE}
+        warehouse: ${SF_WAREHOUSE}
+        role: ${SF_ROLE}
+        client_session_keep_alive: true
+        session_parameters:
+            QUERY_TAG: soda-queries
+            QUOTED_IDENTIFIERS_IGNORE_CASE: false
+        schema: ${DWH_WAREHOUSE}
