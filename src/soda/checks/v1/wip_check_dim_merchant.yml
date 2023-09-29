@@ -1,0 +1,7 @@
+checks for dim_merchant:
+  - invalid_count(email) = 0:
+      valid format: email
+  - missing_count(last_name) = 0:
+      name: Ensure there are no null values in the last name column
+  - missing_count(first_name) = 0:
+      name: Ensure there are no null values in the first name column
