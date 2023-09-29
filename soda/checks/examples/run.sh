@@ -1,0 +1,3 @@
+touch checks_dim_customer.yml
+touch checks_dim_contact_unique.yml
+touch checks_dim_service.yml

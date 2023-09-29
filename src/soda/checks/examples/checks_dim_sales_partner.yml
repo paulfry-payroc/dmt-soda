@@ -1,0 +1,4 @@
+checks for dim_contact_unique:
+# Check for valid values
+  - invalid_count(email) = 0:
+      valid format: email

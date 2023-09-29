@@ -1,0 +1,3 @@
+# Check that a dataset contains rows
+checks for dim_service:
+  - row_count > 0
