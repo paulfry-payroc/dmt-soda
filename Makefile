@@ -18,11 +18,9 @@ include src/makefile/config.mk # load variables from separate file
 include src/makefile/setup.mk # contains setup scripts
 
 # VENV := source .venv/bin/activate
-VENV_ACTIVATE := . ./.venv/bin/activate
-SODA_DATA_SRC := snowflake_db
-SODA_CONFIG := soda/configuration.yml
-SODA_TEST_CMD := ${VENV_ACTIVATE} && soda scan -d ${SODA_DATA_SRC} -c ${SODA_CONFIG}
-SODA_CHECKS_DIR := soda/checks/examples
+SODA_TEST_CMD := . ./.venv/bin/activate && soda scan -d snowflake_db -c soda/configuration.yml
+SODA_CHECKS_EXAMPLES_DIR := soda/checks/examples
+SODA_CHECKS_DIR := soda/checks/v1/
 
 #=======================================================================
 # Targets
@@ -39,21 +37,41 @@ test:
 	# all emails should be valid
 	@${SODA_TEST_CMD} soda/checks/examples/checks_dim_contact_unique.yml
 
+#------------------------
+# test examples
+#------------------------
 test_simple_1_row_count:
 	@#pipe the output of the command to remove the snowflake connection messages
-	@(${SODA_TEST_CMD} ${SODA_CHECKS_DIR}/simple/1_row_count_dim_service.yml) 2>&1 | ${RM_EXTRA_OP} | ${RM_EXTRA_OP_2}
+	@(${SODA_TEST_CMD} ${SODA_CHECKS_EXAMPLES_DIR}/simple/1_row_count_dim_service.yml) 2>&1 | ${RM_EXTRA_OP} | ${RM_EXTRA_OP_2}
 
 test_simple_2_mids:
-	@(${SODA_TEST_CMD} ${SODA_CHECKS_DIR}/simple/2_duplicate_col_dim_merchant_mid.yml) 2>&1 | ${RM_EXTRA_OP} | ${RM_EXTRA_OP_2}
+	@(${SODA_TEST_CMD} ${SODA_CHECKS_EXAMPLES_DIR}/simple/2_duplicate_col_dim_merchant_mid.yml) 2>&1 | ${RM_EXTRA_OP} | ${RM_EXTRA_OP_2}
 
 test_simple_3_invalid_email:
-	@(${SODA_TEST_CMD} ${SODA_CHECKS_DIR}/simple/3_invalid_email_dim_sales_partner.yml) 2>&1 | ${RM_EXTRA_OP} | ${RM_EXTRA_OP_2}
+	@(${SODA_TEST_CMD} ${SODA_CHECKS_EXAMPLES_DIR}/simple/3_invalid_email_dim_sales_partner.yml) 2>&1 | ${RM_EXTRA_OP} | ${RM_EXTRA_OP_2}
 
-test_fuller_dim_contact:
-	@(${SODA_TEST_CMD} ${SODA_CHECKS_DIR}/simple/4_dim_contact_unique.yml) 2>&1 | ${RM_EXTRA_OP} | ${RM_EXTRA_OP_2}
+#------------------------
+# template example
+#------------------------
+template_eg:
+	# TODO
+	# See: https://docs.soda.io/soda-cl/check-template.html
+	@(${SODA_TEST_CMD} soda/checks/TODO -T templates.yml) 2>&1 | ${RM_EXTRA_OP} | ${RM_EXTRA_OP_2}
 
-#-------------------
-# data profiling
-#-------------------
-data_profiling_example:
-	${SODA_PROFILE_CMD} dim_merchant
+#------------------------
+# V1 tests
+#------------------------
+test_dim_contact:
+	@(${SODA_TEST_CMD} ${SODA_CHECKS_DIR}/v1/4_dim_contact_unique.yml) 2>&1 | ${RM_EXTRA_OP} | ${RM_EXTRA_OP_2}
+
+test_dim_merchant:
+	# TODO
+	#@(${SODA_TEST_CMD} ${SODA_CHECKS_DIR}/v1/wip_check_dim_merchant.yml) 2>&1 | ${RM_EXTRA_OP} | ${RM_EXTRA_OP_2}
+
+test_dim_sales_partner:
+	# TODO
+	#@(${SODA_TEST_CMD} ${SODA_CHECKS_DIR}/v1/wip_check_dim_sales_partner.yml) 2>&1 | ${RM_EXTRA_OP} | ${RM_EXTRA_OP_2}
+
+test_dim_sales_rep:
+	# TODO
+	#@(${SODA_TEST_CMD} ${SODA_CHECKS_DIR}/v1/wip_check_dim_sales_rep.yml) 2>&1 | ${RM_EXTRA_OP} | ${RM_EXTRA_OP_2}
