@@ -37,8 +37,8 @@ deps:
 	@cp src/templates/jinja_templates/configuration.yml configuration.yml
 	@j2 src/templates/jinja_templates/checks.yml.j2 -o checks.yml
 	@echo "Step 4: Verify soda is installed, run 'soda --help'" && echo
-	@. ./.venv/bin/activate && soda --help
-	@# test connectivity to the source db
+	@. ./.venv/bin/activate && soda --help && echo
+	@echo "Step 5: Test connectivity to the source db" && echo
 	@make -s test_connection
 .PHONY: deps
 
@@ -80,5 +80,5 @@ test_connection:
 	@echo "${YELLOW}# Target 'test_connection'. Test connectivity to a data source.${COLOUR_OFF}"
 	@echo "------------------------------------------------------------------" && echo
 	@echo "Verify source db connection" && echo
-	@. ./.venv/bin/activate && soda test-connection -d snowflake_db -c configuration.yml
+	@. ./.venv/bin/activate && soda test-connection -d snowflake_db -c configuration.yml | grep "Successfully connected"
 .PHONY: test_connection
