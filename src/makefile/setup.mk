@@ -41,6 +41,12 @@ deps:
 	@echo "${PURPLE}Step 5: Test connectivity to the source db${COLOUR_OFF}"
 	@make -s test_connection
 
+test_connection:
+	@echo && echo "------------------------------------------------------------------"
+	@echo "${YELLOW}# Target 'test_connection'. Test connectivity to a data source.${COLOUR_OFF}"
+	@echo "------------------------------------------------------------------" && echo
+	@${VENV_ACTIVATE} && soda test-connection -d ${SODA_DATA_SRC} -c ${SODA_CONFIG} | grep "Successfully connected"
+
 clean:
 	@echo && echo "------------------------------------------------------------------"
 	@echo "${YELLOW}# Target 'clean'. Remove any redundant files, e.g. downloads.${COLOUR_OFF}"
