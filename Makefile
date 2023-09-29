@@ -24,33 +24,46 @@ all: deps install clean
 VENV := source .venv/bin/activate
 
 deps:
-	@echo "----------------------------------------------------------------------------------------------------------------------"
-	@echo "${YELLOW}Target: 'deps'. Download the relevant pip package dependencies (note: ignore the pip dependency resolver errors.)${COLOUR_OFF}"
-	@echo "----------------------------------------------------------------------------------------------------------------------"
+	@echo && echo "----------------------------------------------------------------------------------------------------------------------"
+	@echo "${YELLOW}# Target: 'deps'. Download the relevant pip package dependencies.${COLOUR_OFF}"
+	@echo "----------------------------------------------------------------------------------------------------------------------" && echo
+	@echo "Step 1: Create a virtualenv (.venv) with the required Python libraries (see requirements.txt)"
 	@python3 -m venv .venv; \
 	chmod +x ./.venv/bin/activate; \
 	. ./.venv/bin/activate && pip install -r requirements.txt -q;
-	@j2 src/templates/jinja_templates/configuration.yml.j2 -o configuration.yml
+	@echo "Step 2: Generate .env file"
+	@cp src/templates/jinja_templates/.env.j2 .env
+	@echo "Step 3: Generate soda config files (configuration.yml & checks.yml)"
+	@cp src/templates/jinja_templates/configuration.yml configuration.yml
+	@j2 src/templates/jinja_templates/checks.yml.j2 -o checks.yml
+	@echo "Step 4: Verify soda is installed, run 'soda --help'" && echo
+	@. ./.venv/bin/activate && soda --help
+	@# test connectivity to the source db
+	@make -s test_connection
 .PHONY: deps
 
-install:
-	@echo "------------------------------------------------------------------"
-	@echo "${YELLOW}Target: 'install'. Run the setup and install targets.${COLOUR_OFF}"
-	@echo "------------------------------------------------------------------"
+run:
+	@echo && echo "------------------------------------------------------------------"
+	@echo "${YELLOW}# Target: 'run'. Run the setup and install targets.${COLOUR_OFF}"
+	@echo "------------------------------------------------------------------" && echo
 	@source .venv/bin/activate
-.PHONY: install
+.PHONY: run
 
 test:
-	@echo "------------------------------------------------------------------"
+	@echo && echo "------------------------------------------------------------------"
 	@echo "${YELLOW}Target 'test'. Perform any required tests.${COLOUR_OFF}"
-	@echo "------------------------------------------------------------------"
+	@echo "------------------------------------------------------------------" && echo
+	@echo "Target 'test' called"
 .PHONY: test
 
 clean:
-	@echo "------------------------------------------------------------------"
-	@echo "${YELLOW}Target 'clean'. Remove any redundant files, e.g. downloads.${COLOUR_OFF}"
-	@echo "------------------------------------------------------------------"
+	@echo && echo "------------------------------------------------------------------"
+	@echo "${YELLOW}# Target 'clean'. Remove any redundant files, e.g. downloads.${COLOUR_OFF}"
+	@echo "------------------------------------------------------------------" && echo
 	@rm -rf .venv
+	@rm -rf configuration.yml
+	@rm -rf checks.yml
+	@rm -rf .env
 .PHONY: clean
 
 # Phony targets
@@ -58,3 +71,14 @@ clean:
 
 # .PHONY tells Make that these targets don't represent files
 # This prevents conflicts with any files named "all" or "clean"
+
+#---------------------------
+# Supplementary targets
+#---------------------------
+test_connection:
+	@echo && echo "------------------------------------------------------------------"
+	@echo "${YELLOW}# Target 'test_connection'. Test connectivity to a data source.${COLOUR_OFF}"
+	@echo "------------------------------------------------------------------" && echo
+	@echo "Verify source db connection" && echo
+	@. ./.venv/bin/activate && soda test-connection -d snowflake_db -c configuration.yml
+.PHONY: test_connection
