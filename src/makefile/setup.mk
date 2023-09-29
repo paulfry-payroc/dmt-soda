@@ -29,8 +29,8 @@ deps:
 	@echo "${YELLOW}# Target: 'deps'. Download the relevant pip package dependencies.${COLOUR_OFF}"
 	@echo "----------------------------------------------------------------------------------------------------------------------" && echo
 	@echo "${PURPLE}Step 1: Create a virtualenv (.venv) with the required Python libraries (see requirements.txt)${COLOUR_OFF}"
-	@python3 -m venv .venv && chmod +x ./.venv/bin/activate;
-	@. ./.venv/bin/activate && pip install -r requirements.txt -q;
+	@python3 -m venv .venv && chmod +x ./.venv/bin/activate
+	@. ./.venv/bin/activate && pip install -r requirements.txt -q
 	@echo "${PURPLE}Step 2: Generate .env file${COLOUR_OFF}"
 	@cp src/templates/jinja_templates/.env.j2 .env
 	@echo "${PURPLE}Step 3: Generate soda config files (configuration.yml & checks.yml)${COLOUR_OFF}"
@@ -45,8 +45,8 @@ test_connection:
 	@echo && echo "------------------------------------------------------------------"
 	@echo "${YELLOW}# Target 'test_connection'. Test connectivity to a data source.${COLOUR_OFF}"
 	@echo "------------------------------------------------------------------" && echo
-	@${VENV_ACTIVATE} && soda test-connection -d ${SODA_DATA_SRC} -c ${SODA_CONFIG}
-	#@${VENV_ACTIVATE} && soda test-connection -d ${SODA_DATA_SRC} -c ${SODA_CONFIG} | grep "Successfully connected"
+	@(${VENV_ACTIVATE} && soda test-connection -d ${SODA_DATA_SRC} -c ${SODA_CONFIG}) 2>&1 | ${RM_EXTRA_OP} | ${RM_EXTRA_OP_2}
+
 
 clean:
 	@echo && echo "------------------------------------------------------------------"

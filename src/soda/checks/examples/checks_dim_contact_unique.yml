@@ -2,3 +2,7 @@ checks for dim_contact_unique:
 # Check for valid values
   - invalid_count(email) = 0:
       valid format: email
+  - missing_count(last_name) = 0:
+      name: Ensure there are no null values in the first name column
+  - missing_count(first_name) = 0:
+      name: Ensure there are no null values in the first name column

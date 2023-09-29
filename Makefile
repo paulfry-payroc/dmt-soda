@@ -48,3 +48,12 @@ test_simple_2_mids:
 
 test_simple_3_invalid_email:
 	@(${SODA_TEST_CMD} ${SODA_CHECKS_DIR}/simple/3_invalid_email_dim_sales_partner.yml) 2>&1 | ${RM_EXTRA_OP} | ${RM_EXTRA_OP_2}
+
+test_fuller_dim_contact:
+	@(${SODA_TEST_CMD} ${SODA_CHECKS_DIR}/simple/4_dim_contact_unique.yml) 2>&1 | ${RM_EXTRA_OP} | ${RM_EXTRA_OP_2}
+
+#-------------------
+# data profiling
+#-------------------
+data_profiling_example:
+	${SODA_PROFILE_CMD} dim_merchant
