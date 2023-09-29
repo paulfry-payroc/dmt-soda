@@ -1,0 +1,2 @@
+checks for dim_merchant:
+  - duplicate_count(MID) = 0

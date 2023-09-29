@@ -35,7 +35,7 @@ deps:
 	@cp src/templates/jinja_templates/.env.j2 .env
 	@echo "${PURPLE}Step 3: Generate soda config files (configuration.yml & checks.yml)${COLOUR_OFF}"
 	@cp src/templates/jinja_templates/configuration.yml configuration.yml
-	@j2 src/templates/jinja_templates/checks.yml.j2 -o checks.yml
+	@cp -r src/soda/ .
 	@echo "${PURPLE}Step 4: Verify soda is installed.\n\nRun command: 'soda --help'${COLOUR_OFF}" && echo
 	@${VENV_ACTIVATE} && soda --help && echo
 	@echo "${PURPLE}Step 5: Test connectivity to the source db${COLOUR_OFF}"
@@ -45,7 +45,8 @@ test_connection:
 	@echo && echo "------------------------------------------------------------------"
 	@echo "${YELLOW}# Target 'test_connection'. Test connectivity to a data source.${COLOUR_OFF}"
 	@echo "------------------------------------------------------------------" && echo
-	@${VENV_ACTIVATE} && soda test-connection -d ${SODA_DATA_SRC} -c ${SODA_CONFIG} | grep "Successfully connected"
+	@${VENV_ACTIVATE} && soda test-connection -d ${SODA_DATA_SRC} -c ${SODA_CONFIG}
+	#@${VENV_ACTIVATE} && soda test-connection -d ${SODA_DATA_SRC} -c ${SODA_CONFIG} | grep "Successfully connected"
 
 clean:
 	@echo && echo "------------------------------------------------------------------"
